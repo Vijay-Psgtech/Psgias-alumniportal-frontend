@@ -54,3 +54,22 @@ export const albumsAPI = {
     }),
   delete: (id) => api.delete(`/albums/${id}`),
 };
+
+// ── Events API ────────────────────────────────────────────────────────
+export const eventsAPI = {
+  getAll: (params) => api.get("/events", { params }),
+  getById: (id) => api.get(`/events/${id}`),
+  create: (data) =>
+    api.post("/events", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }),
+  update: (id, data) =>
+    api.put(`/events/${id}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }),
+  delete: (id) => api.delete(`/events/${id}`),
+};
