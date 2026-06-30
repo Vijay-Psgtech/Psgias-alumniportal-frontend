@@ -19,7 +19,7 @@ const BLANK_EVENT = {
   title: "",
   date: "",
   time: "",
-  venue: "PSG College of Arts & Science, Coimbatore",
+  venue: "PSG Institute of Advance Studies, Coimbatore",
   description: "",
   status: "upcoming",
   attendees: "",
