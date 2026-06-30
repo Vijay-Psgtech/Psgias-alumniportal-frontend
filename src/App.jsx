@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 const App = () => {
   return (
