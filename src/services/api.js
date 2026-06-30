@@ -73,3 +73,189 @@ export const eventsAPI = {
     }),
   delete: (id) => api.delete(`/events/${id}`),
 };
+
+// ── Campaign API ────────────────────────────────────────────────────────
+export const campaignsAPI = {
+  // Get all campaigns
+  getAll: (params) => {
+    console.log("📡 Fetching all campaigns...");
+    return api.get("/campaigns", { params }).catch((error) => {
+      console.error("❌ Failed to fetch campaigns:", error.message);
+      throw error;
+    });
+  },
+
+  // Get single campaign by ID
+  getById: (id) => {
+    console.log(`📡 Fetching campaign ${id}...`);
+    return api.get(`/campaigns/${id}`).catch((error) => {
+      console.error(`❌ Failed to fetch campaign ${id}:`, error.message);
+      throw error;
+    });
+  },
+
+  // Create new campaign
+  create: (data) => {
+    console.log("📤 Creating campaign...", data.title);
+    return api
+      .post("/campaigns", data)
+      .then((response) => {
+        console.log("✅ Campaign created:", response.data.campaignId);
+        return response;
+      })
+      .catch((error) => {
+        console.error("❌ Campaign creation failed:", error.message);
+        throw error;
+      });
+  },
+
+  // Update campaign
+  update: (id, data) => {
+    console.log(`📤 Updating campaign ${id}...`);
+    return api
+      .put(`/campaigns/${id}`, data)
+      .then((response) => {
+        console.log("✅ Campaign updated:", id);
+        return response;
+      })
+      .catch((error) => {
+        console.error(`❌ Campaign update failed:`, error.message);
+        throw error;
+      });
+  },
+
+  // Delete campaign
+  delete: (id) => {
+    console.log(`📤 Deleting campaign ${id}...`);
+    return api
+      .delete(`/campaigns/${id}`)
+      .then((response) => {
+        console.log("✅ Campaign deleted:", id);
+        return response;
+      })
+      .catch((error) => {
+        console.error(`❌ Campaign deletion failed:`, error.message);
+        throw error;
+      });
+  },
+
+  // ── CAMPAIGN RESPONSES ──
+
+  // Submit response to campaign
+  submitResponse: (campaignId, data) => {
+    console.log(`📤 Submitting response to campaign ${campaignId}...`);
+    return api
+      .post(`/campaigns/${campaignId}/respond`, data)
+      .then((response) => {
+        console.log("✅ Response submitted successfully");
+        return response;
+      })
+      .catch((error) => {
+        console.error("❌ Failed to submit response:", error.message);
+        throw error;
+      });
+  },
+
+  // Get all responses for a campaign
+  getResponses: (campaignId, params = {}) => {
+    console.log(`📡 Fetching responses for campaign ${campaignId}...`, params);
+    return api
+      .get(`/campaigns/${campaignId}/responses`, { params })
+      .then((response) => {
+        console.log(
+          `✅ Fetched ${response.data.count || 0} responses from campaign`,
+        );
+        return response;
+      })
+      .catch((error) => {
+        console.error(
+          `❌ Failed to fetch responses for campaign ${campaignId}:`,
+          error.message,
+        );
+        throw error;
+      });
+  },
+
+  // Get single response
+  getResponse: (responseId) => {
+    console.log(`📡 Fetching response ${responseId}...`);
+    return api.get(`/campaigns/response/${responseId}`).catch((error) => {
+      console.error(`❌ Failed to fetch response:`, error.message);
+      throw error;
+    });
+  },
+
+  // Update response status
+  updateResponseStatus: (responseId, data) => {
+    console.log(`📤 Updating response ${responseId} status...`);
+    return api
+      .put(`/campaigns/response/${responseId}/status`, data)
+      .then((response) => {
+        console.log("✅ Response status updated");
+        return response;
+      })
+      .catch((error) => {
+        console.error("❌ Failed to update response status:", error.message);
+        throw error;
+      });
+  },
+
+  // Publish response as story
+  publishResponse: (responseId, title) => {
+    console.log(`📤 Publishing response ${responseId} as story...`);
+    return api
+      .post(`/campaigns/response/${responseId}/publish`, { title })
+      .then((response) => {
+        console.log("✅ Response published successfully");
+        return response;
+      })
+      .catch((error) => {
+        console.error("❌ Failed to publish response:", error.message);
+        throw error;
+      });
+  },
+
+  // Delete response
+  deleteResponse: (responseId) => {
+    console.log(`📤 Deleting response ${responseId}...`);
+    return api
+      .delete(`/campaigns/response/${responseId}`)
+      .then((response) => {
+        console.log("✅ Response deleted successfully");
+        return response;
+      })
+      .catch((error) => {
+        console.error("❌ Failed to delete response:", error.message);
+        throw error;
+      });
+  },
+
+  // Export responses as CSV
+  exportResponses: (campaignId, params = {}) => {
+    console.log(`📥 Exporting responses for campaign ${campaignId}...`);
+    return api
+      .get(`/campaigns/${campaignId}/responses/export`, {
+        params,
+        responseType: "blob",
+      })
+      .catch((error) => {
+        console.error("❌ Failed to export responses:", error.message);
+        throw error;
+      });
+  },
+
+  // Get campaign analytics
+  getAnalytics: (campaignId) => {
+    console.log(`📊 Fetching analytics for campaign ${campaignId}...`);
+    return api
+      .get(`/campaigns/${campaignId}/analytics`)
+      .then((response) => {
+        console.log("✅ Analytics fetched successfully");
+        return response;
+      })
+      .catch((error) => {
+        console.error("❌ Failed to fetch analytics:", error.message);
+        throw error;
+      });
+  },
+};
