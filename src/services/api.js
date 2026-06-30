@@ -259,3 +259,82 @@ export const campaignsAPI = {
       });
   },
 };
+
+// ✅ NOTIFICATION SCROLL SERVICE (for banner scrolling notifications)
+export const notificationService = {
+  async getActiveNotifications() {
+    try {
+      const response = await api.get("/notification-scrolls/active");
+
+      // Guard against HTML error pages
+      if (typeof response.data === "string") {
+        console.error(
+          "Server returned HTML instead of JSON — check backend route registration for /notification-scrolls",
+        );
+        return { success: false, data: [] };
+      }
+
+      return { success: true, data: response.data?.data || [] };
+    } catch (error) {
+      console.warn("Notifications API Error:", error.message);
+      return { success: false, data: [] };
+    }
+  },
+
+  async getAllNotifications() {
+    const response = await api.get("/notification-scrolls");
+    if (typeof response.data === "string") {
+      throw new Error(
+        "Route /notification-scrolls not found on backend — got HTML response",
+      );
+    }
+    return response.data;
+  },
+
+  async getNotificationById(id) {
+    const response = await api.get(`/notification-scrolls/${id}`);
+    return response.data;
+  },
+
+  async createNotification(data) {
+    const response = await api.post("/notification-scrolls", data);
+    return response.data;
+  },
+
+  async updateNotification(id, data) {
+    const response = await api.put(`/notification-scrolls/${id}`, data);
+    return response.data;
+  },
+
+  async deleteNotification(id) {
+    const response = await api.delete(`/notification-scrolls/${id}`);
+    return response.data;
+  },
+
+  async toggleNotification(id) {
+    const response = await api.patch(
+      `/notification-scrolls/${id}/toggle-active`,
+    );
+    return response.data;
+  },
+
+  async trackView(id) {
+    try {
+      const response = await api.patch(`/notification-scrolls/${id}/view`);
+      return response.data;
+    } catch (error) {
+      console.warn("Failed to track notification view:", error.message);
+      return null;
+    }
+  },
+
+  async trackDismiss(id) {
+    try {
+      const response = await api.patch(`/notification-scrolls/${id}/dismiss`);
+      return response.data;
+    } catch (error) {
+      console.warn("Failed to track notification dismiss:", error.message);
+      return null;
+    }
+  },
+};
