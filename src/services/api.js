@@ -338,3 +338,11 @@ export const notificationService = {
     }
   },
 };
+
+// ──────── ADMIN USERS API ──────────────────────────────────────────────────────
+export const adminUsersAPI = {
+  getAll: () => api.get("/users"),
+  create: (data) => api.post("/users", data),
+  updateUser: (id, data) => api.put(`/users/${id}`, data),
+  deleteUser: (id) => api.delete(`/users/${id}`),
+};
