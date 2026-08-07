@@ -456,3 +456,31 @@ export const adminUsersAPI = {
   updateUser: (id, data) => api.put(`/users/${id}`, data),
   deleteUser: (id) => api.delete(`/users/${id}`),
 };
+
+// ── NewsLetter API ────────────────────────────────────────────────────────
+export const newsLetterAPI = {
+  getAll: () => api.get("/newsletters"),
+  getRecent: () => api.get("/newsletters/recent"),
+  getById: (id) => api.get(`/newsletters/${id}`),
+  create: (data) =>
+    api.post("/newsletters", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }),
+  update: (id, data) =>
+    api.put(`/newsletters/${id}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }),
+  delete: (id) => api.delete(`/newsletters/${id}`),
+};
+
+// ── Admin Reports API ────────────────────────────────────────────────────────
+export const adminReportsAPI = {
+  fetchAlumniDataByYear: () => api.get("/reports/alumni-data-by-year"),
+  fetchEventsDataByMonth: () => api.get("/reports/events-data-by-month"),
+  fetchAlumniDataByDepartment: () =>
+    api.get("/reports/alumni-data-by-department"),
+};
