@@ -36,6 +36,116 @@ api.interceptors.response.use(
 // ──────────────── API_BASE ──────────────────────── //
 export const API_BASE = import.meta.env.VITE_API_URL.replace("/api", "");
 
+// ── Auth API ────────────────────────────────────────────────────────
+export const authAPI = {
+  register: (data) =>
+    api.post("/auth/register", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }),
+  login: (data) => api.post("/auth/login", data),
+  getProfile: () => api.get("/auth/profile"),
+  changePassword: (currentPassword, newPassword) =>
+    api.put("/auth/change-password", { currentPassword, newPassword }),
+  forgotPassword: (email) => api.post("/auth/forgot-password", { email }),
+  verifyOtp: (email, otp) => api.post("/auth/verify-otp", { email, otp }),
+  resetPassword: (email, otp, newPassword) =>
+    api.post("/auth/reset-password", { email, otp, newPassword }),
+};
+
+// ────────────────────────────────────────────────────────────────────────────
+// ✅ DEPARTMENTS API - DYNAMIC DEPARTMENTS MANAGEMENT
+// ────────────────────────────────────────────────────────────────────────────
+
+export const departmentAPI = {
+  // Get all active departments (PUBLIC)
+  getAll: () => {
+    return api.get("/departments");
+  },
+
+  // Get departments by programme type and funding type (PUBLIC)
+  getByType: (programmeType, fundingType) => {
+    return api.get(`/departments/${programmeType}/${fundingType}`);
+  },
+
+  // Get all departments including inactive (ADMIN ONLY)
+  getAllAdmin: () => {
+    return api.get("/departments/admin/all");
+  },
+
+  // Create new department (ADMIN ONLY)
+  create: (data) => {
+    return api
+      .post("/departments", data)
+      .then((response) => {
+        console.log("✅ Department created:", response.data);
+        return response;
+      })
+      .catch((erro) => {
+        console.error(
+          "❌ Department creation failed:",
+          error.response?.data || error.message,
+        );
+        throw error;
+      });
+  },
+
+  // Update department (ADMIN ONLY)
+  update: (id, data) => {
+    console.log(`📤 Updating department ${id}:`, data);
+    return api
+      .put(`/departments/${id}`, data)
+      .then((response) => {
+        console.log("✅ Department updated:", response.data);
+        return response;
+      })
+      .catch((error) => {
+        console.error(
+          "❌ Department update failed:",
+          error.response?.data || error.message,
+        );
+        throw error;
+      });
+  },
+
+  // Delete department (ADMIN ONLY)
+  delete: (id) => {
+    console.log(`📤 Deleting department ${id}...`);
+    return api
+      .delete(`/departments/${id}`)
+      .then((response) => {
+        console.log("✅ Department deleted:", response.data);
+        return response;
+      })
+      .catch((error) => {
+        console.error(
+          "❌ Department deletion failed:",
+          error.response?.data || error.message,
+        );
+        throw error;
+      });
+  },
+
+  // Toggle department active/inactive status (ADMIN ONLY)
+  toggleStatus: (id) => {
+    console.log(`📤 Toggling status for department ${id}...`);
+    return api
+      .patch(`/departments/${id}/toggle`)
+      .then((response) => {
+        console.log("✅ Department status toggled:", response.data);
+        return response;
+      })
+      .catch((error) => {
+        console.error(
+          "❌ Status toggle failed:",
+          error.response?.data || error.message,
+        );
+        throw error;
+      });
+  },
+};
+
 // ── Albums API ────────────────────────────────────────────────────────
 export const albumsAPI = {
   getAll: () => api.get("/albums"),
